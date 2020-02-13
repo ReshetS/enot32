@@ -1,0 +1,14 @@
+FROM alpine:latest
+
+LABEL Maintainer="Reshet <reshet@itsyndicate.org>" \
+      Description="Downloader for enot32.ru server"
+
+RUN apk --update add bash curl wget grep sed apache2-utils unrar findutils ca-certificates dcron && rm -rf /var/cache/apk/*
+
+COPY updater/. /
+
+VOLUME /var/www/updates
+
+ENTRYPOINT ["/cron"]
+
+CMD ["crond", "-f"]
