@@ -47,6 +47,13 @@ function nod32keys_get_new_free_keys() {
                  awk -F: '/((TRIAL|EAV)-[0-9]+)/ {getline b;printf("%s:%s\n",$0,b)}');
     keys_list+=$'\n';
   };
+  page_content="$(network_get_content 'https://t2bot.ru/en/esetkeys/')";
+  [[ ! -z "$page_content" ]] && {
+    keys_list+=$(sed -e 's/<[^>]*>//g' <<< "$page_content" |\
+                 sed -e 's/ //g' | tr -d "\r" |\
+                 awk -F: '/((TRIAL|EAV)-[0-9]+)/ {getline b;printf("%s:%s\n",$0,b)}');
+    keys_list+=$'\n';
+  };
   # thx 2 @cryol <https://github.com/cryol> for this:
   page_content="$(network_get_content 'http://tnoduse2.blogspot.ru/')";
   [[ ! -z "$page_content" ]] && {
